@@ -49,11 +49,23 @@ install_docker() {
 
 install_jdk8() {
     apt-get install -y software-properties-common python-software-properties
-    add-apt-repository -y ppa:webupd8team/java
+    # add-apt-repository -y ppa:webupd8team/java
+    add-apt-repository ppa:openjdk-r/ppa
     apt-get -y update
-    /bin/echo debconf shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
-    apt-get -y install oracle-java8-installer oracle-java8-set-default vim wget screen git    
+    # /bin/echo debconf shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+    # sudo -E add-apt-repository ppa:openjdk-r/ppa 
+    # apt-get -y install oracle-java8-installer oracle-java8-set-default vim wget screen git   
+    apt-get -y install openjdk-8-jdk vim wget screen git 
+    # update-alternatives --config java
+    update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
 }
+# install_jdk8() {
+#     apt-get install -y software-properties-common python-software-properties
+#     add-apt-repository -y ppa:webupd8team/java
+#     apt-get -y update
+#     /bin/echo debconf shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+#     apt-get -y install oracle-java8-installer oracle-java8-set-default vim wget screen git    
+# }
 
 bazelVersion=0.26.0
 bazel_install() {
