@@ -29,7 +29,7 @@ with open(requirement_file, 'r') as f:
   raw_requirements = f.read().strip()
 
 requirements = raw_requirements.split('\n')
-print "Requirements: %s" % requirements
+print ("Requirements: %s" % requirements)
 
 long_description = "The heronpy package enables you to write Heron topologies in Python. " \
                    "Topologies can be run using a variety of schedulers, including Mesos/Aurora," \
@@ -56,7 +56,7 @@ setup(
     'Programming Language :: Python :: 3.5',
     'Programming Language :: Python :: 3.6',
   ],
-
+  use_2to3=True,
   keywords='heron topology python',
   packages=find_packages(),
 

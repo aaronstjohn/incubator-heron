@@ -30,17 +30,28 @@ end
 
 Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu/trusty64"
-  config.vm.synced_folder "../", "/vagrant"
+  config.vm.synced_folder "../","/vagrant"
+  # config.vm.synced_folder "../../vagrant_home","/home/vagrant/.cache/bazel/_bazel_vagrant",type: "rsync", rsync__args: ["--verbose",  "--rsync-path='sudo rsync'","--archive", "--delete", "-z"]
+  # config.vm.synced_folder "../../bazel-root","/home/vagrant/.cache/bazel/_bazel_vagrant"
+  #,type: "rsync", rsync__args: ["--verbose",  "--rsync-path='sudo rsync'","--archive", "--delete", "-z"]
+  # config.vm.provider "virtualbox" do |v|
+  #   v.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/vagrant", "1"]
+  # end
+  # type: "rsync", rsync__args: ["--verbose", "--archive","-K", "--delete","-z"]
+
 
   config.vm.define "master" do |master|
     master.vm.provider "virtualbox" do |v|
       v.memory = 4096
+      v.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
     end
 
     master.vm.hostname = "master"
     master.vm.network :private_network, ip: NODES["master"]
 
     master.vm.provision "shell", path: "init.sh", args: "master"
+    master.vm.provision "shell", path: "build.sh", privileged: "false"
+    
   end
 
   (0..SLAVES-1).each do |i|

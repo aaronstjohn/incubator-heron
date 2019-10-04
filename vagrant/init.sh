@@ -80,7 +80,8 @@ bazel_install() {
         popd
         wget -O /tmp/bazel.sh https://github.com/bazelbuild/bazel/releases/download/${bazelVersion}/bazel-${bazelVersion}-installer-linux-x86_64.sh
         chmod +x /tmp/bazel.sh
-        /tmp/bazel.sh --user 
+        /tmp/bazel.sh 
+        # /tmp/bazel.sh --user 
     popd
 }
 
@@ -96,9 +97,11 @@ build_heron() {
         export CC=gcc-4.8
         export CXX=g++-4.8
         export PATH=/sbin:$PATH
-        ~/bin/bazel clean
+        bazel clean
+        # ~/bin/bazel clean
         ./bazel_configure.py
-        ~/bin/bazel --bazelrc=tools/travis/bazel.rc build --config=ubuntu heron/...
+        bazel --bazelrc=tools/travis/bazel.rc build --config=darwin heron/... --verbose-failures=true
+        # ~/bin/bazel --bazelrc=tools/travis/bazel.rc build --config=ubuntu heron/...
     popd
 }
 
@@ -143,13 +146,13 @@ echo "deb http://get.docker.com/ubuntu docker main" > /etc/apt/sources.list.d/do
 apt-get -qy update
 
 # install deps
-apt-get install -qy vim zip mc curl wget openjdk-7-jre scala git python-setuptools python-dev
-
+apt-get install -qy vim zip mc curl wget openjdk-7-jre tree scala git python-setuptools python-dev python3-pip
+pip3 install setuptools
 install_mesos $mode
 if [ $mode == "master" ]; then 
     install_marathon
     bazel_install
-    build_heron
+    # build_heron
 fi
 
 install_docker
